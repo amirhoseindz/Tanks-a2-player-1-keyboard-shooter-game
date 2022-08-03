@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,7 +12,7 @@ public class TankMovement : MonoBehaviour
     public AudioClip m_EngineIdling;       
     public AudioClip m_EngineDriving;      
     public float m_PitchRange = 0.2f;
-    
+    public TankHealth m_Red;
     
     private string m_MovementAxisName;     
     private string m_TurnAxisName;         
@@ -106,11 +107,19 @@ public class TankMovement : MonoBehaviour
 
         m_Rigidbody.MoveRotation (m_Rigidbody.rotation * turnRotation);
     }
+
+    IEnumerator Respawn(Collider other, int time)
+    {
+        yield return new WaitForSeconds(time);
+        
+        other.gameObject.SetActive(true);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
+            StartCoroutine(Respawn(other, m_Red.FirstAidKitRespawnTime));
         }
     }
 }
