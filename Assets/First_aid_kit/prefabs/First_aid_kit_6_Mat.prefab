@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4689345990570408}
   - component: {fileID: 1224620038}
   - component: {fileID: 1224620037}
-  - component: {fileID: 1893689614872112177}
+  - component: {fileID: 4403395688126075603}
   m_Layer: 0
   m_Name: First_aid_kit_6_Mat
   m_TagString: PickUp
@@ -147,7 +147,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 98.2272, y: 49.20532, z: 62.58011}
   m_Center: {x: -0.12754798, y: 20.185547, z: 2.5039673}
---- !u!114 &1893689614872112177
+--- !u!114 &4403395688126075603
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,9 +156,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1854425252707494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07f756b20fafcdb4f96ca678ccfe706c, type: 3}
+  m_Script: {fileID: 11500000, guid: 992a9f1cb29bcec4db634ac23646630e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RedAidKitHealing: 30
-  FirstAidKitRespawnTime: 10
-  m_SpawnPoint: {fileID: 4689345990570408}
+  m_CloseAidKitHealing: 20
+  m_CloseFirstAidKitRespawnTime: 100

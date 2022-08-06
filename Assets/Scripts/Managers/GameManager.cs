@@ -11,8 +11,12 @@ public class GameManager : MonoBehaviour
     public Text m_MessageText;                 
     public GameObject m_TankPrefab;            
     public TankManager[] m_Tanks;
-    public GameObject m_FirstAidKitPrefab;
-    public Transform m_RedFirstAidKitSpawnPoint;
+    public GameObject m_CloseToBlueFirstAidKitPrefab;
+    public Transform m_CloseToBlueFirstAidKitSpawnPoint;
+    public GameObject m_CloseToRedFirstAidKitPrefab;
+    public Transform m_CloseToRedFirstAidKitSpawnPoint;
+    public GameObject m_FarFirstAidKitPrefab;
+    public Transform m_FarFirstAidKitSpawnPoint;
 
     private int m_RoundNumber;                 
     private WaitForSeconds m_StartWait;        
@@ -28,6 +32,13 @@ public class GameManager : MonoBehaviour
 
         SpawnAllTanks();
         SetCameraTargets();
+        
+        Instantiate(m_CloseToBlueFirstAidKitPrefab
+            , m_CloseToBlueFirstAidKitSpawnPoint.position, m_CloseToBlueFirstAidKitSpawnPoint.rotation);
+        Instantiate(m_CloseToRedFirstAidKitPrefab
+            , m_CloseToRedFirstAidKitSpawnPoint.position, m_CloseToRedFirstAidKitSpawnPoint.rotation);
+        Instantiate(m_FarFirstAidKitPrefab
+            , m_FarFirstAidKitSpawnPoint.position, m_FarFirstAidKitSpawnPoint.rotation);
 
         StartCoroutine (GameLoop ());
     }
@@ -44,9 +55,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnRedAidKit()
+    private void SpawnAllCloseAidKits()
     {
-        Instantiate(m_FirstAidKitPrefab, m_RedFirstAidKitSpawnPoint.position, m_RedFirstAidKitSpawnPoint.rotation);
+        if (!m_CloseToBlueFirstAidKitPrefab)
+        {
+            Instantiate(m_CloseToBlueFirstAidKitPrefab
+                , m_CloseToBlueFirstAidKitSpawnPoint.position, m_CloseToBlueFirstAidKitSpawnPoint.rotation);
+        }
+
+        if (!m_CloseToRedFirstAidKitPrefab)
+        {
+            Instantiate(m_CloseToRedFirstAidKitPrefab
+                , m_CloseToRedFirstAidKitSpawnPoint.position, m_CloseToRedFirstAidKitSpawnPoint.rotation);
+        }
+
+        if (!m_FarFirstAidKitPrefab)
+        {
+            Instantiate(m_FarFirstAidKitPrefab
+                , m_FarFirstAidKitSpawnPoint.position, m_FarFirstAidKitSpawnPoint.rotation);
+        }
     }
 
 
@@ -85,7 +112,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RoundStarting ()
     {
         ResetAllTanks ();
-        SpawnRedAidKit();
+        SpawnAllCloseAidKits();
         DisableTankControl ();
 
         m_CameraControl.SetStartPositionAndSize ();

@@ -120,9 +120,17 @@ public class TankMovement : MonoBehaviour
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-            var co = other.gameObject.GetComponent<FirstAidKitManager>();
-            m_Tank.GetHealed(co.m_RedAidKitHealing);
-            StartCoroutine(Respawn(other, co.m_RedFirstAidKitRespawnTime));
+            var closeAidKits = other.gameObject.GetComponent<CloseFirstAidKit>();
+            m_Tank.GetHealed(closeAidKits.m_CloseAidKitHealing);
+            StartCoroutine(Respawn(other, closeAidKits.m_CloseFirstAidKitRespawnTime));
+        }
+
+        if (other.gameObject.CompareTag("OtherPickUp"))
+        {
+            other.gameObject.SetActive(false);
+            var farAidKit = other.gameObject.GetComponent<FarFirstAidKit>();
+            m_Tank.GetHealed(farAidKit.m_FarFirstAidKitHealing);
+            StartCoroutine(Respawn(other, farAidKit.m_FarFirstAidKitRespawnTime));
         }
     }
 }

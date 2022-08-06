@@ -49,6 +49,10 @@ public class TankHealth : MonoBehaviour
     public void GetHealed (float amount)
     {
         m_CurrentHealth += amount;
+        if (m_CurrentHealth > m_StartingHealth)
+        {
+            m_CurrentHealth = m_StartingHealth;
+        }
 
         SetHealthUI ();
     }
