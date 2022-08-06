@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Text m_MessageText;                 
     public GameObject m_TankPrefab;            
     public TankManager[] m_Tanks;
+    public GameObject m_FirstAidKitPrefab;
+    public Transform m_RedFirstAidKitSpawnPoint;
 
     private int m_RoundNumber;                 
     private WaitForSeconds m_StartWait;        
@@ -40,6 +42,11 @@ public class GameManager : MonoBehaviour
             m_Tanks[i].m_PlayerNumber = i + 1;
             m_Tanks[i].Setup();
         }
+    }
+
+    private void SpawnRedAidKit()
+    {
+        Instantiate(m_FirstAidKitPrefab, m_RedFirstAidKitSpawnPoint.position, m_RedFirstAidKitSpawnPoint.rotation);
     }
 
 
@@ -78,6 +85,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RoundStarting ()
     {
         ResetAllTanks ();
+        SpawnRedAidKit();
         DisableTankControl ();
 
         m_CameraControl.SetStartPositionAndSize ();

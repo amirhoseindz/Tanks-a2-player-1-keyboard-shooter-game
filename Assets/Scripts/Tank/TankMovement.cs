@@ -12,14 +12,14 @@ public class TankMovement : MonoBehaviour
     public AudioClip m_EngineIdling;       
     public AudioClip m_EngineDriving;      
     public float m_PitchRange = 0.2f;
-    public TankHealth m_Red;
-    
+    public TankHealth m_Tank;
+
     private string m_MovementAxisName;     
     private string m_TurnAxisName;         
     private Rigidbody m_Rigidbody;         
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
-    private float m_OriginalPitch;         
+    private float m_OriginalPitch;    
 
 
     private void Awake ()
@@ -49,6 +49,7 @@ public class TankMovement : MonoBehaviour
         m_TurnAxisName = "Horizontal" + m_PlayerNumber;
 
         m_OriginalPitch = m_MovementAudio.pitch;
+        
     }
 
     
@@ -116,10 +117,12 @@ public class TankMovement : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Pick Up"))
+        if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-            StartCoroutine(Respawn(other, m_Red.FirstAidKitRespawnTime));
+            var co = other.gameObject.GetComponent<FirstAidKitManager>();
+            m_Tank.GetHealed(co.m_RedAidKitHealing);
+            StartCoroutine(Respawn(other, co.m_RedFirstAidKitRespawnTime));
         }
     }
 }

@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class FirstAidKitManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    public float m_RedAidKitHealing = 15f;
+    public int m_RedFirstAidKitRespawnTime = 100;
     void Update()
     {
-        
+        transform.Rotate(new Vector3(0, 180, 0) * Time.deltaTime);
     }
 }
