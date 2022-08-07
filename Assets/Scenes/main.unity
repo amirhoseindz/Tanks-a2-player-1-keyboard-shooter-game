@@ -444,15 +444,18 @@ MonoBehaviour:
     m_ColoredPlayerText: 
     m_Instance: {fileID: 0}
     m_Wins: 0
-  m_CloseToBlueFirstAidKitPrefab: {fileID: 1854425252707494, guid: b1f79bc72c7086542a923e6545cc40d2,
-    type: 3}
-  m_CloseToBlueFirstAidKitSpawnPoint: {fileID: 2006062995}
-  m_CloseToRedFirstAidKitPrefab: {fileID: 1854425252707494, guid: b1f79bc72c7086542a923e6545cc40d2,
-    type: 3}
-  m_CloseToRedFirstAidKitSpawnPoint: {fileID: 904688144}
-  m_FarFirstAidKitPrefab: {fileID: 1432603531362136, guid: f19d6bc16f603024aa4eba1116a7fe46,
-    type: 3}
-  m_FarFirstAidKitSpawnPoint: {fileID: 1845807177}
+  m_FirstAidKitPrefabs:
+  - {fileID: 1854425252707494, guid: b1f79bc72c7086542a923e6545cc40d2, type: 3}
+  - {fileID: 1854425252707494, guid: b1f79bc72c7086542a923e6545cc40d2, type: 3}
+  - {fileID: 1432603531362136, guid: f19d6bc16f603024aa4eba1116a7fe46, type: 3}
+  m_FirstAidKitSpawnPoints:
+  - {fileID: 2006062995}
+  - {fileID: 904688144}
+  - {fileID: 1845807177}
+  m_FirstAidKit:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &916239439
 Transform:
   m_ObjectHideFlags: 0

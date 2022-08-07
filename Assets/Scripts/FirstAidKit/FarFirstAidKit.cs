@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FarFirstAidKit : MonoBehaviour
 {
-    public float m_FarFirstAidKitHealing = 20f;
+    public float m_FarFirstAidKitHealing = 50f;
     public int m_FarFirstAidKitRespawnTime = 12;
     void Update()
     {

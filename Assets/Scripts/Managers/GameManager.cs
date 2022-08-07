@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,18 +12,15 @@ public class GameManager : MonoBehaviour
     public Text m_MessageText;                 
     public GameObject m_TankPrefab;            
     public TankManager[] m_Tanks;
-    public GameObject m_CloseToBlueFirstAidKitPrefab;
-    public Transform m_CloseToBlueFirstAidKitSpawnPoint;
-    public GameObject m_CloseToRedFirstAidKitPrefab;
-    public Transform m_CloseToRedFirstAidKitSpawnPoint;
-    public GameObject m_FarFirstAidKitPrefab;
-    public Transform m_FarFirstAidKitSpawnPoint;
+    public GameObject[] m_FirstAidKitPrefabs;
+    public Transform[] m_FirstAidKitSpawnPoints;
+    public GameObject[] m_FirstAidKit;
 
     private int m_RoundNumber;                 
     private WaitForSeconds m_StartWait;        
     private WaitForSeconds m_EndWait;          
     private TankManager m_RoundWinner;       
-    private TankManager m_GameWinner;         
+    private TankManager m_GameWinner;
 
 
     private void Start()
@@ -33,12 +31,20 @@ public class GameManager : MonoBehaviour
         SpawnAllTanks();
         SetCameraTargets();
         
-        Instantiate(m_CloseToBlueFirstAidKitPrefab
-            , m_CloseToBlueFirstAidKitSpawnPoint.position, m_CloseToBlueFirstAidKitSpawnPoint.rotation);
-        Instantiate(m_CloseToRedFirstAidKitPrefab
-            , m_CloseToRedFirstAidKitSpawnPoint.position, m_CloseToRedFirstAidKitSpawnPoint.rotation);
-        Instantiate(m_FarFirstAidKitPrefab
-            , m_FarFirstAidKitSpawnPoint.position, m_FarFirstAidKitSpawnPoint.rotation);
+        for (int i = 0; i < m_FirstAidKitPrefabs.Length; i++)
+        {
+            Vector3 randomSpawnPosition = new Vector3(Random.Range(-36, 0), 0, Random.Range(-12, 12));
+            if (i == 2)
+            {
+                m_FirstAidKit[i] = Instantiate(m_FirstAidKitPrefabs[i],
+                    randomSpawnPosition, Quaternion.identity);
+            }
+            else
+            {
+                m_FirstAidKit[i] = Instantiate(m_FirstAidKitPrefabs[i],
+                    m_FirstAidKitSpawnPoints[i].position, Quaternion.identity);
+            }
+        }
 
         StartCoroutine (GameLoop ());
     }
@@ -55,24 +61,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SpawnAllCloseAidKits()
+    private void SpawnAllAidKits()
     {
-        if (!m_CloseToBlueFirstAidKitPrefab)
+        for (int i = 0; i < m_FirstAidKitPrefabs.Length; i++)
         {
-            Instantiate(m_CloseToBlueFirstAidKitPrefab
-                , m_CloseToBlueFirstAidKitSpawnPoint.position, m_CloseToBlueFirstAidKitSpawnPoint.rotation);
-        }
-
-        if (!m_CloseToRedFirstAidKitPrefab)
-        {
-            Instantiate(m_CloseToRedFirstAidKitPrefab
-                , m_CloseToRedFirstAidKitSpawnPoint.position, m_CloseToRedFirstAidKitSpawnPoint.rotation);
-        }
-
-        if (!m_FarFirstAidKitPrefab)
-        {
-            Instantiate(m_FarFirstAidKitPrefab
-                , m_FarFirstAidKitSpawnPoint.position, m_FarFirstAidKitSpawnPoint.rotation);
+            if (!m_FirstAidKit[i].active)
+            {
+                Vector3 randomSpawnPosition = new Vector3(Random.Range(-36, 0), 0, Random.Range(-12, 12));
+                if (i == 2)
+                {
+                    m_FirstAidKit[i] = Instantiate(m_FirstAidKitPrefabs[i],
+                        randomSpawnPosition, Quaternion.identity);
+                }
+                else
+                {
+                    m_FirstAidKit[i] = Instantiate(m_FirstAidKitPrefabs[i],
+                        m_FirstAidKitSpawnPoints[i].position, Quaternion.identity);
+                }
+            }
         }
     }
 
@@ -112,7 +118,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RoundStarting ()
     {
         ResetAllTanks ();
-        SpawnAllCloseAidKits();
+        SpawnAllAidKits();
         DisableTankControl ();
 
         m_CameraControl.SetStartPositionAndSize ();
