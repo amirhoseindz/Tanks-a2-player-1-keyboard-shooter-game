@@ -12,15 +12,14 @@ public class TankMovement : MonoBehaviour
     public AudioClip m_EngineIdling;       
     public AudioClip m_EngineDriving;      
     public float m_PitchRange = 0.2f;
-    public TankHealth m_Tank;
+    public TankHealth m_TankHealthBar;
 
     private string m_MovementAxisName;     
     private string m_TurnAxisName;         
     private Rigidbody m_Rigidbody;         
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
-    private float m_OriginalPitch;    
-
+    private float m_OriginalPitch;
 
     private void Awake ()
     {
@@ -121,15 +120,22 @@ public class TankMovement : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             var closeAidKits = other.gameObject.GetComponent<CloseFirstAidKit>();
-            m_Tank.GetHealed(closeAidKits.m_CloseAidKitHealing);
+            m_TankHealthBar.GetHealed(closeAidKits.m_CloseAidKitHealing);
             StartCoroutine(Respawn(other, closeAidKits.m_CloseFirstAidKitRespawnTime));
         }
-
+        
         if (other.gameObject.CompareTag("OtherPickUp"))
         {
             other.gameObject.SetActive(false);
             var farAidKit = other.gameObject.GetComponent<FarFirstAidKit>();
-            m_Tank.GetHealed(farAidKit.m_FarFirstAidKitHealing);
+            if (m_PlayerNumber == 1)
+            {
+                m_TankHealthBar.GetHealed(farAidKit.m_FarFirstAidKitHealingForTankNum1);
+            }
+            else
+            {
+                m_TankHealthBar.GetHealed(farAidKit.m_FarFirstAidKitHealingForTankNum2);
+            }
             StartCoroutine(Respawn(other, farAidKit.m_FarFirstAidKitRespawnTime));
         }
     }

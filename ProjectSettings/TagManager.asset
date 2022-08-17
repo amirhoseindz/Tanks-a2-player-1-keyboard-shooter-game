@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PickUp
   - OtherPickUp
+  - Tank
   layers:
   - Default
   - TransparentFX

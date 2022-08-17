@@ -5,32 +5,33 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public int m_NumRoundsToWin = 5;           
-    public float m_StartDelay = 3f;            
-    public float m_EndDelay = 3f;              
-    public CameraControl m_CameraControl;       
-    public Text m_MessageText;                 
-    public GameObject m_TankPrefab;            
+    public int m_NumRoundsToWin = 5;
+    public float m_StartDelay = 3f;
+    public float m_EndDelay = 3f;
+    public CameraControl m_CameraControl;
+    public Text m_MessageText;
+    public GameObject m_TankPrefab;
     public TankManager[] m_Tanks;
     public GameObject[] m_FirstAidKitPrefabs;
     public Transform[] m_FirstAidKitSpawnPoints;
     public GameObject[] m_FirstAidKit;
+    
 
-    private int m_RoundNumber;                 
-    private WaitForSeconds m_StartWait;        
-    private WaitForSeconds m_EndWait;          
-    private TankManager m_RoundWinner;       
+
+    private int m_RoundNumber;
+    private WaitForSeconds m_StartWait;
+    private WaitForSeconds m_EndWait;
+    private TankManager m_RoundWinner;
     private TankManager m_GameWinner;
-
 
     private void Start()
     {
-        m_StartWait = new WaitForSeconds (m_StartDelay);
-        m_EndWait = new WaitForSeconds (m_EndDelay);
+        m_StartWait = new WaitForSeconds(m_StartDelay);
+        m_EndWait = new WaitForSeconds(m_EndDelay);
 
         SpawnAllTanks();
         SetCameraTargets();
-        
+
         for (int i = 0; i < m_FirstAidKitPrefabs.Length; i++)
         {
             Vector3 randomSpawnPosition = new Vector3(Random.Range(-36, 0), 0, Random.Range(-12, 12));
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        StartCoroutine (GameLoop ());
+        StartCoroutine(GameLoop());
     }
 
 
@@ -55,7 +56,8 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < m_Tanks.Length; i++)
         {
             m_Tanks[i].m_Instance =
-                Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
+                Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as
+                    GameObject;
             m_Tanks[i].m_PlayerNumber = i + 1;
             m_Tanks[i].Setup();
         }
@@ -96,32 +98,32 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator GameLoop ()
+    private IEnumerator GameLoop()
     {
-        yield return StartCoroutine (RoundStarting ());
+        yield return StartCoroutine(RoundStarting());
 
-        yield return StartCoroutine (RoundPlaying());
+        yield return StartCoroutine(RoundPlaying());
 
-        yield return StartCoroutine (RoundEnding());
+        yield return StartCoroutine(RoundEnding());
 
         if (m_GameWinner != null)
         {
-            Application.LoadLevel (Application.loadedLevel);
+            Application.LoadLevel(Application.loadedLevel);
         }
         else
         {
-            StartCoroutine (GameLoop ());
+            StartCoroutine(GameLoop());
         }
     }
 
 
-    private IEnumerator RoundStarting ()
+    private IEnumerator RoundStarting()
     {
-        ResetAllTanks ();
+        ResetAllTanks();
         SpawnAllAidKits();
-        DisableTankControl ();
+        DisableTankControl();
 
-        m_CameraControl.SetStartPositionAndSize ();
+        m_CameraControl.SetStartPositionAndSize();
 
         m_RoundNumber++;
         m_MessageText.text = "ROUND " + m_RoundNumber;
@@ -130,9 +132,9 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator RoundPlaying ()
+    private IEnumerator RoundPlaying()
     {
-        EnableTankControl ();
+        EnableTankControl();
 
         m_MessageText.text = string.Empty;
 
@@ -143,20 +145,20 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator RoundEnding ()
+    private IEnumerator RoundEnding()
     {
-        DisableTankControl ();
+        DisableTankControl();
 
         m_RoundWinner = null;
 
-        m_RoundWinner = GetRoundWinner ();
+        m_RoundWinner = GetRoundWinner();
 
         if (m_RoundWinner != null)
             m_RoundWinner.m_Wins++;
 
-        m_GameWinner = GetGameWinner ();
+        m_GameWinner = GetGameWinner();
 
-        string message = EndMessage ();
+        string message = EndMessage();
         m_MessageText.text = message;
 
         yield return m_EndWait;
@@ -238,7 +240,6 @@ public class GameManager : MonoBehaviour
             m_Tanks[i].EnableControl();
         }
     }
-
 
     private void DisableTankControl()
     {
