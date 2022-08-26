@@ -37,11 +37,11 @@ public class ShellExplosion : MonoBehaviour
             }
             else
             {
-                m_HomingMissileTarget = m_Target.m_Tanks[1].m_Instance.transform.position;
+                m_HomingMissileTarget = m_Target.m_Tanks[0].m_Instance.transform.position;
             }
             missileDirection = m_HomingMissileTarget - transform.position;
             transform.position = Vector3.MoveTowards(transform.position, m_HomingMissileTarget, 
-                m_TankShooting.m_MaxLaunchForce * Time.deltaTime);
+                m_TankShooting.m_MaxLaunchForce* Time.deltaTime);
             missileDirection.Normalize();
             var rotateAmount = Quaternion.LookRotation(missileDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotateAmount, m_RotateSpeed * Time.deltaTime);

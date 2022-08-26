@@ -1039,7 +1039,7 @@ MonoBehaviour:
   m_MinLaunchForce: 15
   m_MaxLaunchForce: 30
   m_MaxChargeTime: 0.75
-  m_RotateSpeed: 200
+  m_Flag: 0
 --- !u!1 &2507317695390122117
 GameObject:
   m_ObjectHideFlags: 0
