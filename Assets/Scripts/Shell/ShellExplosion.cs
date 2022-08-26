@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class ShellExplosion : MonoBehaviour
 {
@@ -7,15 +8,50 @@ public class ShellExplosion : MonoBehaviour
     public AudioSource m_ExplosionAudio;               
     public float m_MaxDamage = 100f;                 
     public float m_ExplosionForce = 1000f;             
-    public float m_MaxLifeTime = 2f;                   
-    public float m_ExplosionRadius = 5f;           
+    public float m_MaxLifeTime = 10f;                   
+    public float m_ExplosionRadius = 5f;
+    public float m_RotateSpeed = 200f;
 
+    private GameManager m_Target;
+    private TankShooting m_TankShooting;
+    private Vector3 missileDirection;
+    
 
     private void Start ()
     {
         Destroy (gameObject, m_MaxLifeTime);
+        
+        m_Target = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+
+        m_TankShooting = GameObject.FindGameObjectWithTag("Player").GetComponent<TankShooting>();
     }
 
+    private void Update()
+    {
+        if (m_TankShooting.m_Flag)
+        {
+            if (m_TankShooting.m_PlayerNumber == 1)
+            {
+                transform.position = Vector3.MoveTowards(transform.position,
+                    m_Target.m_Tanks[1].m_Instance.transform.position,
+                    m_TankShooting.m_MaxLaunchForce * Time.deltaTime);
+                
+                missileDirection = m_Target.m_Tanks[1].m_Instance.transform.position - transform.position;
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position,
+                    m_Target.m_Tanks[0].m_Instance.transform.position,
+                    m_TankShooting.m_MaxLaunchForce * Time.deltaTime);
+                
+                missileDirection = m_Target.m_Tanks[0].m_Instance.transform.position - transform.position;
+            }
+            missileDirection.Normalize();
+            var rotateAmount = Quaternion.LookRotation(missileDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotateAmount,
+                m_RotateSpeed * Time.deltaTime);
+        }
+    }
 
     private void OnTriggerEnter (Collider other)
     {
