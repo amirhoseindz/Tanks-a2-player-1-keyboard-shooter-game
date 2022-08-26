@@ -36,13 +36,10 @@ public class TankShooting : MonoBehaviour
         m_FireButton = "Fire" + m_PlayerNumber;
 
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
-        
     }
 
     private void SpawnShell()
     {
-        shellInstance =
-            Instantiate (m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
     }
 
 
@@ -54,11 +51,11 @@ public class TankShooting : MonoBehaviour
         {
             m_Flag = true;
             m_CurrentLaunchForce = m_MaxLaunchForce;
-            SpawnShell();
             Fire();
         }
         else if (Input.GetButtonDown (m_FireButton))
         {
+            m_Flag = false;
             m_Fired = false;
             m_CurrentLaunchForce = m_MinLaunchForce;
 
@@ -67,14 +64,15 @@ public class TankShooting : MonoBehaviour
         }
         else if (Input.GetButton (m_FireButton) && !m_Fired)
         {
+            m_Flag = false;
+            
             m_CurrentLaunchForce += m_ChargeSpeed * Time.deltaTime;
 
             m_AimSlider.value = m_CurrentLaunchForce;
         }
         else if (Input.GetButtonUp (m_FireButton) && !m_Fired)
         {
-            SpawnShell();
-            shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
+            m_Flag = false;
             Fire ();
         }
     }
@@ -84,6 +82,10 @@ public class TankShooting : MonoBehaviour
     {
         m_Fired = true;
         
+        shellInstance =
+            Instantiate (m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
+        shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
+
         m_ShootingAudio.clip = m_FireClip;
         m_ShootingAudio.Play ();
 

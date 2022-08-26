@@ -15,6 +15,7 @@ public class ShellExplosion : MonoBehaviour
     private GameManager m_Target;
     private TankShooting m_TankShooting;
     private Vector3 missileDirection;
+    private Vector3 m_HomingMissileTarget;
     
 
     private void Start ()
@@ -32,24 +33,18 @@ public class ShellExplosion : MonoBehaviour
         {
             if (m_TankShooting.m_PlayerNumber == 1)
             {
-                transform.position = Vector3.MoveTowards(transform.position,
-                    m_Target.m_Tanks[1].m_Instance.transform.position,
-                    m_TankShooting.m_MaxLaunchForce * Time.deltaTime);
-                
-                missileDirection = m_Target.m_Tanks[1].m_Instance.transform.position - transform.position;
+                m_HomingMissileTarget = m_Target.m_Tanks[1].m_Instance.transform.position;
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position,
-                    m_Target.m_Tanks[0].m_Instance.transform.position,
-                    m_TankShooting.m_MaxLaunchForce * Time.deltaTime);
-                
-                missileDirection = m_Target.m_Tanks[0].m_Instance.transform.position - transform.position;
+                m_HomingMissileTarget = m_Target.m_Tanks[1].m_Instance.transform.position;
             }
+            missileDirection = m_HomingMissileTarget - transform.position;
+            transform.position = Vector3.MoveTowards(transform.position, m_HomingMissileTarget, 
+                m_TankShooting.m_MaxLaunchForce * Time.deltaTime);
             missileDirection.Normalize();
             var rotateAmount = Quaternion.LookRotation(missileDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotateAmount,
-                m_RotateSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotateAmount, m_RotateSpeed * Time.deltaTime);
         }
     }
 
