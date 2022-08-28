@@ -14,7 +14,8 @@ public class TankShooting : MonoBehaviour
     public float m_MinLaunchForce = 15f;        
     public float m_MaxLaunchForce = 30f;        
     public float m_MaxChargeTime = 0.75f;
-    public bool m_Flag;
+    public float m_RotateSpeed = 200f;
+
 
 
     private string m_FireButton;               
@@ -22,6 +23,9 @@ public class TankShooting : MonoBehaviour
     private float m_ChargeSpeed;                
     private bool m_Fired;
     private Rigidbody shellInstance;
+    private GameManager m_Target;
+    private Vector3 missileDirection;
+    private Vector3 m_HomingMissileTarget;
 
 
     private void OnEnable()
@@ -36,26 +40,37 @@ public class TankShooting : MonoBehaviour
         m_FireButton = "Fire" + m_PlayerNumber;
 
         m_ChargeSpeed = (m_MaxLaunchForce - m_MinLaunchForce) / m_MaxChargeTime;
+        
+        m_Target = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
-
-    private void SpawnShell()
-    {
-    }
-
 
     private void Update ()
     {
         m_AimSlider.value = m_MinLaunchForce;
-
+        
         if (m_CurrentLaunchForce >= m_MaxLaunchForce && !m_Fired)
         {
-            m_Flag = true;
             m_CurrentLaunchForce = m_MaxLaunchForce;
+            if (m_PlayerNumber == 1)
+            {
+                m_HomingMissileTarget = m_Target.m_Tanks[1].m_Instance.transform.position;
+            }
+            else
+            {
+                m_HomingMissileTarget = m_Target.m_Tanks[0].m_Instance.transform.position;
+            }
+            Debug.Log(m_HomingMissileTarget);
+            m_FireTransform.position = Vector3.MoveTowards(m_FireTransform.position, m_HomingMissileTarget, 
+                m_MaxLaunchForce * Time.deltaTime);
+            missileDirection = m_HomingMissileTarget - m_FireTransform.position;
+            missileDirection.Normalize();
+            var rotateAmount = Quaternion.LookRotation(missileDirection);
+            m_FireTransform.rotation = Quaternion.Slerp(m_FireTransform.rotation,
+                rotateAmount, m_RotateSpeed * Time.deltaTime);
             Fire();
         }
         else if (Input.GetButtonDown (m_FireButton))
         {
-            m_Flag = false;
             m_Fired = false;
             m_CurrentLaunchForce = m_MinLaunchForce;
 
@@ -64,15 +79,12 @@ public class TankShooting : MonoBehaviour
         }
         else if (Input.GetButton (m_FireButton) && !m_Fired)
         {
-            m_Flag = false;
-            
             m_CurrentLaunchForce += m_ChargeSpeed * Time.deltaTime;
 
             m_AimSlider.value = m_CurrentLaunchForce;
         }
         else if (Input.GetButtonUp (m_FireButton) && !m_Fired)
         {
-            m_Flag = false;
             Fire ();
         }
     }
@@ -81,11 +93,12 @@ public class TankShooting : MonoBehaviour
     private void Fire ()
     {
         m_Fired = true;
-        
+
         shellInstance =
             Instantiate (m_Shell, m_FireTransform.position, m_FireTransform.rotation) as Rigidbody;
+        
         shellInstance.velocity = m_CurrentLaunchForce * m_FireTransform.forward;
-
+        
         m_ShootingAudio.clip = m_FireClip;
         m_ShootingAudio.Play ();
 
