@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 831241026145201349}
   m_LocalRotation: {x: 0.025610296, y: 0.8772774, z: -0.04710331, w: 0.47697997}
-  m_LocalPosition: {x: 1.0799651, y: 1.529532, z: 2.7213724}
+  m_LocalPosition: {x: 2.4876657, y: 1.3489014, z: 1.8095145}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -201,6 +201,9 @@ MonoBehaviour:
   m_ExplosionForce: 1000
   m_MaxLifeTime: 2
   m_ExplosionRadius: 5
+  m_RotateSpeed: 200
+  m_HoomingShellTarget: {fileID: 2507317695389637987, guid: 09c7d6635c931dd4d92c213627b58154,
+    type: 3}
 --- !u!1001 &831241026178547922
 PrefabInstance:
   m_ObjectHideFlags: 0

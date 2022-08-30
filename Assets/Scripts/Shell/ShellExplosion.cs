@@ -10,14 +10,39 @@ public class ShellExplosion : MonoBehaviour
     public float m_ExplosionForce = 1000f;             
     public float m_MaxLifeTime = 10f;                   
     public float m_ExplosionRadius = 5f;
+    public float m_RotateSpeed = 200f;
+    public Transform m_HoomingShellTarget;
     
-    
+    private Vector3 missileDirection;
+    private TankShooting m_TankShooting;
+
+
 
     private void Start ()
     {
         Destroy (gameObject, m_MaxLifeTime);
-        
 
+        m_TankShooting = GameObject.FindGameObjectWithTag("Player").GetComponent<TankShooting>();
+
+    }
+
+    public void SetHomingShellTarget(Transform homingShellTarget)
+    {
+        m_HoomingShellTarget.position = homingShellTarget.position;
+    }
+
+    private void Update()
+    {
+        if (m_HoomingShellTarget != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, m_HoomingShellTarget.position, 
+                m_TankShooting.m_MaxLaunchForce * Time.deltaTime);
+            missileDirection = m_HoomingShellTarget.position - transform.position;
+            missileDirection.Normalize();
+            var rotateAmount = Quaternion.LookRotation(missileDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                rotateAmount, m_RotateSpeed * Time.deltaTime);
+        }
     }
 
     private void OnTriggerEnter (Collider other)
